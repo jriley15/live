@@ -3,7 +3,7 @@ import { formatErrors } from '../helpers/errorHelper';
 //import store from '../store/store';
 import { connect } from 'react-redux';
 
-export const api = "https://localhost:44326";
+export const api = "https://api.jrdn.tech";
 
 export const basicPost = async(controller, action, params) => {
     
@@ -72,9 +72,6 @@ export const authGet = async(authToken, controller, action, params) => {
 
 }
 
-
- 
-
 export const basicGet = async(controller, action, params) => {
 
     let response = {
@@ -105,10 +102,3 @@ export const basicGet = async(controller, action, params) => {
     return response;
 
 }
-
-
- 
-
-
-
-

@@ -15,6 +15,7 @@
     "axios": "^0.18.0",
     "cookie-parser": "^1.4.4",
     "express": "4.16.4",
+    "hls.js": "^0.12.4",
     "razzle": "2.4.1",
     "react": "16.8.5",
     "react-dom": "16.8.5",

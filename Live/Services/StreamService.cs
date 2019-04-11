@@ -26,7 +26,7 @@ namespace Live.Services
 
         Task<bool> ViewStream(int userId);
 
-        Task<Response> PublishStream(string key);
+        Task<PublishStreamResponse> PublishStream(string key);
 
         Task EndPublishStream(string key);
 
@@ -71,12 +71,14 @@ namespace Live.Services
         public IEnumerable<StreamDto> GetStreams()
         {
 
-            return (IEnumerable<StreamDto>)_cacheService.GetOrSet("streams", () =>
+            /*return (IEnumerable<StreamDto>)_cacheService.GetOrSet("streams", () =>
             {
                 return _mapper.Map<IEnumerable<StreamDto>>(_dbContext.Streams.Include(s => s.User).OrderByDescending(s => s.Views).ThenByDescending(s => s.Streaming).ToList());
 
-            });
-                    
+            });*/
+
+            return _mapper.Map<IEnumerable<StreamDto>>(_dbContext.Streams.Include(s => s.User).OrderByDescending(s => s.Views).ThenByDescending(s => s.Streaming).ToList());
+
         }
 
         public async Task<StreamDto> GetUserStream(int userId)
@@ -89,11 +91,11 @@ namespace Live.Services
             return await _dbContext.Streams.SingleOrDefaultAsync(s => s.UserId == userId);
         }
 
-        public async Task<Response> PublishStream(string key)
+        public async Task<PublishStreamResponse> PublishStream(string key)
         {
-            var response = new Response();
+            var response = new PublishStreamResponse();
 
-            var stream = await _dbContext.Streams.SingleOrDefaultAsync(s => s.Key == key);
+            var stream = await _dbContext.Streams.Include(s =>s .User).SingleOrDefaultAsync(s => s.Key == key);
 
             if (stream != null)
             {
@@ -101,6 +103,7 @@ namespace Live.Services
                 await _dbContext.SaveChangesAsync();
 
                 response.Success = true;
+                response.StreamName = stream.StreamId.ToString();
             }
 
             return response;
@@ -112,6 +115,7 @@ namespace Live.Services
             var stream = await _dbContext.Streams.SingleOrDefaultAsync(s => s.Key == key);
 
             stream.Streaming = false;
+            stream.Viewers = 0;
 
             await _dbContext.SaveChangesAsync();
 
@@ -126,7 +130,7 @@ namespace Live.Services
             if (stream != null)
             {
                 stream.Viewers++;
-                stream.Views++;
+                //stream.Views++;
                 await _dbContext.SaveChangesAsync();
 
                 response.Success = true;

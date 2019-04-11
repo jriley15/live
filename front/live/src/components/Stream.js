@@ -5,7 +5,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Chat from './Chat';
-import { basicPost } from "../services/apiService";
+import { basicPost, basicGet } from "../services/apiService";
+import Hls from 'hls.js';
 
 const styles = theme => ({
     root: {
@@ -40,6 +41,30 @@ class Stream extends Component {
 
         basicPost("Streams", "ViewStream", this.props.match.params.id);
 
+        basicGet("Streams", "Onwatch", {id: this.props.match.params.id});
+        let me = this;
+        if (Hls.isSupported()) {
+            var video = document.getElementById('live');
+            var hls = new Hls();
+            // bind them together
+            hls.attachMedia(video);
+            video.play();
+
+            hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+              console.log("video and hls.js are now bound together !");
+              hls.loadSource("http://98.171.80.97:8080/live/"+me.props.match.params.id+"/index.m3u8");
+              hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
+                console.log("manifest loaded, found " + data.levels.length + " quality level");
+              });
+            });
+        }
+
+    }
+
+    componentWillUnmount() {
+
+        basicGet("Streams", "OnWatchDone", {id: this.props.match.params.id});
+
     }
 
 
@@ -66,8 +91,8 @@ class Stream extends Component {
 
                         </Typography>
 
-                        <video controls className={classes.player}>
-                            <source src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" type="video/mp4" />
+                        <video id="live" controls className={classes.player}>
+                           
                         </video>
 
                         <Grid container direction="row" justify="space-between" >

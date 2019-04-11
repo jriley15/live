@@ -58,7 +58,8 @@ class Home extends React.Component {
   
   componentDidMount() {
 
-      this.props.getStreams();
+    
+    this.props.getStreams();
 
   }
 

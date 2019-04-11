@@ -54,28 +54,49 @@ namespace Live.Controllers
             return await _streamService.GetMyStream(this.User.GetUserId());
         }
 
-        [HttpGet]
-        public async Task<IActionResult> PublishStream(string key)
+        
+        // nginx will hit this end point with stream key under 'name' parameter
+        //we will verify this key and then return a redirect with the users username as the name
+        //so that the stream gets published to this directory on rtmp server
+        //here we set stream as online
+        [HttpPost]
+        public async Task<IActionResult> OnPublish([FromForm]string name)
         {
-            return GenerateResponse(await _streamService.PublishStream(key));
+            var response = await _streamService.PublishStream(name);
+
+            if (response.Success)
+            {
+                return Redirect(response.StreamName);
+            } else
+            {
+                return BadRequest();
+            }
+
         }
 
-        [HttpGet]
-        public async Task<IActionResult> EndPublishStream(string key)
+        //nginx will call this when publish is done, so we set stream offline here
+        [HttpPost]
+        public async Task<IActionResult> OnPublishDone([FromForm]string name)
         {
-            await _streamService.EndPublishStream(key);
+            await _streamService.EndPublishStream(name);
 
             return Ok();
         }
 
+
+        //increment live viewers
         [HttpGet]
-        public async Task<IActionResult> WatchStream(int id)
+        public async Task<IActionResult> Onwatch(int id)
         {
             return GenerateResponse(await _streamService.WatchStream(id));
+
+
+            return Ok();
         }
 
+        //decrement live viewers
         [HttpGet]
-        public async Task<IActionResult> EndWatchStream(int id)
+        public async Task<IActionResult> OnWatchDone(int id)
         {
             await _streamService.EndWatchStream(id);
 
