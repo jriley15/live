@@ -23,11 +23,23 @@ const styles = theme => ({
         [theme.breakpoints.down('xs')]: {
             minWidth: 'calc(100% - ' + theme.spacing.unit + 'px)',
           },
+
+         
+    },
+
+    chat: {
+
+
+      width: 'calc(100% - '+ theme.spacing.unit +'px)',
+
+      [theme.breakpoints.up('sm')]: {
+        width: '300px',
+      },  
     },
 
     player: {
         width: '100%',
-
+        maxHeight: 'calc(100vh - 160px)'
     },
 
 });
@@ -41,11 +53,12 @@ class Stream extends Component {
 
         basicPost("Streams", "ViewStream", this.props.match.params.id);
 
-        basicGet("Streams", "Onwatch", {id: this.props.match.params.id});
+        //basicGet("Streams", "Onwatch", {id: this.props.match.params.id});
+
         let me = this;
         if (Hls.isSupported()) {
             var video = document.getElementById('live');
-            var hls = new Hls();
+            const hls = new Hls();
             // bind them together
             hls.attachMedia(video);
             video.play();
@@ -57,13 +70,29 @@ class Stream extends Component {
                 console.log("manifest loaded, found " + data.levels.length + " quality level");
               });
             });
+
+            this.hls = hls;
         }
+
+        this.streamUpdateInterval = setInterval(() => {
+            
+            this.props.getStream(this.props.match.params.id);
+
+        }, 5000);
 
     }
 
     componentWillUnmount() {
 
-        basicGet("Streams", "OnWatchDone", {id: this.props.match.params.id});
+        //basicGet("Streams", "OnWatchDone", {id: this.props.match.params.id});
+
+
+        if (this.hls) {
+            this.hls.destroy();
+        }
+
+
+        clearInterval(this.streamUpdateInterval);
 
     }
 
@@ -81,7 +110,7 @@ class Stream extends Component {
         return (
             <div className={classes.root}>
                 
-                <Grid container direction="row" justify="space-between" >
+                <Grid container justify="space-between" >
 
                     <Grid item className={classes.main}>
 
@@ -91,10 +120,13 @@ class Stream extends Component {
 
                         </Typography>
 
-                        <video id="live" controls className={classes.player}>
-                           
-                        </video>
-
+                        <Grid container justify="center" >
+                            <Grid item xs={12}>
+                                <video id="live" controls className={classes.player}>
+                                
+                                </video>
+                            </Grid>
+                        </Grid>
                         <Grid container direction="row" justify="space-between" >
 
                             <Grid item>
@@ -128,9 +160,9 @@ class Stream extends Component {
                     </Grid>
 
 
-                    <Grid item>
+                    <Grid item className={classes.chat}>
                     
-                        <Chat chatRoom={chatRoom} />
+                        <Chat chatRoomId={this.getId(chatRoom)} />
 
                     </Grid>
 
@@ -145,7 +177,16 @@ class Stream extends Component {
 
     }
 
+    getId(chatRoom) {
+        if (chatRoom) {
+            return chatRoom.chatRoomId;
+        }
+        return 0;
+    }
+
 }
+
+
 
 
 const mapStateToProps = state => ({

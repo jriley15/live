@@ -14,11 +14,6 @@ const styles = theme => ({
     root: {
       //padding: theme.spacing.unit
 
-      width: 'calc(100% - '+ theme.spacing.unit +'px)',
-
-      [theme.breakpoints.up('sm')]: {
-        width: '300px',
-      },  
 
       height: 'calc(100vh - '+ theme.spacing.unit * 6 +'px)',
       backgroundColor: grey[200],
@@ -71,28 +66,36 @@ class Chat extends Component {
 
         //this.scrollToBottom();
         //this.initChatRoom();
-        
+        this.initChatRoom();
     }
 
+    componentWillUnmount() {
+        if (this.connection) {
+            this.connection.stop();
+        }
+    }
 
     componentDidUpdate(prevProps, prevState) {
 
-        if (prevProps.chatRoom !== this.props.chatRoom) {
+        if (prevProps.chatRoomId !== this.props.chatRoomId) {
+
             this.initChatRoom();
-        }
-        if (prevProps.loginState.authenticated !== this.props.loginState.authenticated) {
+
+        } else if (prevProps.loginState.authenticated !== this.props.loginState.authenticated) {
+
             this.initChatRoom();
+            
         }
 
     }
 
     initChatRoom = () => {
-        if (this.props.chatRoom) {
+        if (this.props.chatRoomId > 0) {
             if (this.connection) {
                 this.connection.stop();
             }
             const me = this;
-            const { chatRoomId } = this.props.chatRoom;
+            const chatRoomId = this.props.chatRoomId;
 
             this.connection = new signalR.HubConnectionBuilder()
                 .withUrl(api + "/chat", { accessTokenFactory: () => this.props.loginState.authToken })
@@ -102,6 +105,8 @@ class Chat extends Component {
             this.connection.start().then(() => {
                 console.log("connected");
                 this.connection.invoke("Join", chatRoomId);
+
+                //this.connection.invoke("Watch", this.props.chatRoom.streamId);
             });
 
             this.connection.on("Messages", (messages) => {
@@ -131,7 +136,7 @@ class Chat extends Component {
     sendMessage = () => {
 
         if (this.connection && this.props.loginState.authenticated) {
-            this.connection.invoke("SendMessage", this.props.chatRoom.chatRoomId, this.state.message);
+            this.connection.invoke("SendMessage", this.props.chatRoomId, this.state.message);
 
         }
         this.setState({message: ''});

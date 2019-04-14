@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,6 +19,10 @@ namespace Live.Services
 
         Task<IEnumerable<ChatMessageDto>> GetMessages(int chatRoomId);
         Task<ChatMessageDto> AddMessage(int chatRoomId, string message, int userId);
+
+        Task<Response> WatchStream(string connectionId, int streamId);
+
+        Task EndWatchStream(string connectionId);
     }
 
     public class ChatService : IChatService
@@ -27,10 +32,13 @@ namespace Live.Services
 
         private readonly IMapper _mapper;
 
+        private static ConcurrentDictionary<string, int> userStreamMapping;
+
         public ChatService(IDatabaseContextFactory dbContextFactory, IMapper mapper)
         {
             _dbContextFactory = dbContextFactory;
             _mapper = mapper;
+            userStreamMapping = new ConcurrentDictionary<string, int>();
         }
 
         public async Task<IEnumerable<ChatMessageDto>> GetMessages(int chatRoomId)
@@ -61,5 +69,51 @@ namespace Live.Services
             }
         }
 
+        public async Task<Response> WatchStream(string connectionId, int chatRoomId)
+        {
+
+            var response = new Response();
+
+            using (var dbContext = _dbContextFactory.Create())
+            {
+                var stream = await dbContext.Streams.Include(s => s.ChatRoom).SingleOrDefaultAsync(s => s.ChatRoom.ChatRoomId == chatRoomId);
+
+                if (stream != null)
+                {
+                    stream.Viewers++;
+                    //stream.Views++;
+                    await dbContext.SaveChangesAsync();
+
+                    response.Success = true;
+
+                    userStreamMapping.TryAdd(connectionId, stream.StreamId);
+                }
+            }
+
+
+
+            return response;
+        }
+
+        public async Task EndWatchStream(string connectionId)
+        {
+            var streamId = userStreamMapping.GetValueOrDefault(connectionId);
+
+            if (streamId > 0)
+            {
+                using (var dbContext = _dbContextFactory.Create())
+                {
+                    var stream = await dbContext.Streams.SingleOrDefaultAsync(s => s.StreamId == streamId);
+
+                    if (stream != null)
+                    {
+                        stream.Viewers--;
+                        await dbContext.SaveChangesAsync();
+                    }
+                }
+            }
+        }
+
+        
     }
 }

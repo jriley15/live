@@ -20,8 +20,8 @@ import cookieParser from 'cookie-parser';
 import loginConstants from './constants/loginConstants';
 import axios from 'axios';
 import { api } from './services/apiService';
-const https = require('https');
 import { initialState } from './reducers/streamReducer';
+const https = require('https');
 
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
@@ -54,7 +54,7 @@ server
         }
       }
     }
-
+    /*
     if (req.originalUrl === "/") {
       await axios.get(api+"/Streams/GetStreams", {
         httpsAgent: new https.Agent({ rejectUnauthorized: false })
@@ -72,7 +72,7 @@ server
       }).catch(function (errors) {
 
       });
-    }
+    }*/
 
     // Create a new Redux store instance
     const store = configureStore(preloadedState);
@@ -113,16 +113,20 @@ server
             ? `<link rel="stylesheet" href="${assets.client.css}">`
             : ''
         }
-        ${css ? `<style id='jss-ssr'>${css}</style>` : ''}
+        
+    </head>
+    <body>
+        <div id="root">${markup}</div>
+
+        <style id="jss-server-side">${css}</style>
+
+
         ${
           process.env.NODE_ENV === 'production'
             ? `<script src="${assets.client.js}" defer></script>`
             : `<script src="${assets.client.js}" defer crossorigin></script>`
         }
         
-    </head>
-    <body>
-        <div id="root">${markup}</div>
         <script>
           window.__PRELOADED_STATE__ = ${serialize(finalState)}
         </script>

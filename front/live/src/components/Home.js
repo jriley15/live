@@ -89,7 +89,7 @@ class Home extends React.Component {
                     </Typography>
                   )}
                 </Typography>
-                <img src="https://multimedia.europarl.europa.eu/o/europarltv-theme/images/europarltv/media-default-thumbnail-url-video.png" className={classes.image} />
+                <img src={stream.streaming ? "http://192.168.1.17:8080/thumbnails/"+stream.streamId+".png" : "https://multimedia.europarl.europa.eu/o/europarltv-theme/images/europarltv/media-default-thumbnail-url-video.png"} className={classes.image} />
                 <Typography variant="body1" gutterBottom align="center">
 
                   {stream.streaming && stream.viewers + " watching"}

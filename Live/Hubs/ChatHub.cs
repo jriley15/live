@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace Live.Hubs
         {
 
             this._chatService = chatService;
+            
 
         }
 
@@ -35,6 +37,8 @@ namespace Live.Hubs
 
             await Clients.Caller.SendAsync("Messages", await _chatService.GetMessages(id));
 
+
+            await this._chatService.WatchStream(Context.ConnectionId, id);
         }
 
         [Authorize]
@@ -47,10 +51,17 @@ namespace Live.Hubs
 
             await this.Clients.Group(chatRoomId.ToString()).SendAsync("Message", msg);
 
+        }
+
+        public override async Task OnDisconnectedAsync(Exception exception)
+        {
+            await base.OnDisconnectedAsync(exception);
+
+            await this._chatService.EndWatchStream(Context.ConnectionId);
 
         }
 
 
-
     }
+
 }

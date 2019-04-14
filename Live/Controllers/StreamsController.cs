@@ -102,5 +102,12 @@ namespace Live.Controllers
 
             return Ok();
         }
+
+        [HttpGet]
+        public IActionResult Test()
+        {
+
+            return Ok();
+        }
     }
 }

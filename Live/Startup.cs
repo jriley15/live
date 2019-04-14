@@ -132,7 +132,7 @@ namespace Live
                 policy.AllowAnyHeader();
                 policy.AllowAnyMethod();
                 //policy.AllowAnyOrigin();
-                policy.WithOrigins("http://localhost:3000", "http://192.168.1.17", "https://api.jrdn.tech", "http://98.171.80.97:3000");
+                policy.WithOrigins("http://localhost:3000", "http://192.168.1.17", "https://live.jrdn.tech", "http://98.171.80.97:3000");
                 policy.AllowCredentials();
             });
 

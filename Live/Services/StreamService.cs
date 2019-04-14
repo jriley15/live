@@ -115,7 +115,7 @@ namespace Live.Services
             var stream = await _dbContext.Streams.SingleOrDefaultAsync(s => s.Key == key);
 
             stream.Streaming = false;
-            stream.Viewers = 0;
+            //stream.Viewers = 0;
 
             await _dbContext.SaveChangesAsync();
 

@@ -56,7 +56,8 @@ class Register extends Component {
         username: '',
         password: '',
         confirmpassword: '',
-        errors: []
+        errors: [],
+        success: false
     }
 
     register = async() => {
@@ -72,6 +73,8 @@ class Register extends Component {
         });
 
         if (response.success) {
+
+            this.setState({success: true});
 
         } else {
 
@@ -122,98 +125,119 @@ class Register extends Component {
 
         const { classes } = this.props;
         
-        return (
+        if (this.state.success) {
 
-
-            <div className={classes.main}>
-                <Paper className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign up
-                    </Typography>
-
-                    {this.hasErrors("*") && (
-                        <Typography variant="">
-
-                            {this.getErrors("*")}
-
+            return (
+                <div className={classes.main}>
+                    <Paper className={classes.paper}>
+                        <Avatar className={classes.avatar}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            Sign up
                         </Typography>
-                    )}
+                        
 
-                    <form className={classes.form}>
-                        <TextField
-                            id="email"
-                            label="Email Address"
-                            className={classes.textField}
-                            margin="normal"
-                            variant="outlined"
-                            fullWidth
-                            value={this.state.email}
-                            onChange={this.handleChange}
-                            error={this.hasErrors("email")}
-                            helperText={this.getErrors("email")}
-                            
-                        />
-                        <TextField
-                            id="username"
-                            label="User name"
-                            className={classes.textField}
-                            margin="normal"
-                            variant="outlined"
-                            fullWidth
-                            value={this.state.username}
-                            onChange={this.handleChange}
-                            error={this.hasErrors("username")}
-                            helperText={this.getErrors("username")}
-                        />
-                        <TextField
-                            id="password"
-                            label="Password"
-                            className={classes.textField}
-                            margin="normal"
-                            variant="outlined"
-                            type="password"
-                            fullWidth
-                            value={this.state.password}
-                            onChange={this.handleChange}
-                            error={this.hasErrors("password")}
-                            helperText={this.getErrors("password")}
-                        />
-                        <TextField
-                            id="confirmpassword"
-                            label="Confirm Password"
-                            className={classes.textField}
-                            margin="normal"
-                            type="password"
-                            variant="outlined"
-                            fullWidth
-                            value={this.state.confirmpassword}
-                            onChange={this.handleChange}
-                            error={this.hasErrors("confirmpassword")}
-                            helperText={this.getErrors("confirmpassword")}
-                        />
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="I accept the Terms & Conditions"
-                        />
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                            value={this.state.email}
-                            onClick={this.register}
-                        >
-                            Submit
-                        </Button>
-                    </form>
-                </Paper>
+                    </Paper>
+                </div>
 
-            </div>
+            )
 
-        )
+        } else {
+
+            
+            return (
+
+
+                <div className={classes.main}>
+                    <Paper className={classes.paper}>
+                        <Avatar className={classes.avatar}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            Sign up
+                        </Typography>
+    
+                        {this.hasErrors("*") && (
+                            <Typography variant="">
+
+                                {this.getErrors("*")}
+
+                            </Typography>
+                        )}
+
+                        <form className={classes.form}>
+                            <TextField
+                                id="email"
+                                label="Email Address"
+                                className={classes.textField}
+                                margin="normal"
+                                variant="outlined"
+                                fullWidth
+                                value={this.state.email}
+                                onChange={this.handleChange}
+                                error={this.hasErrors("email")}
+                                helperText={this.getErrors("email")}
+                                
+                            />
+                            <TextField
+                                id="username"
+                                label="User name"
+                                className={classes.textField}
+                                margin="normal"
+                                variant="outlined"
+                                fullWidth
+                                value={this.state.username}
+                                onChange={this.handleChange}
+                                error={this.hasErrors("username")}
+                                helperText={this.getErrors("username")}
+                            />
+                            <TextField
+                                id="password"
+                                label="Password"
+                                className={classes.textField}
+                                margin="normal"
+                                variant="outlined"
+                                type="password"
+                                fullWidth
+                                value={this.state.password}
+                                onChange={this.handleChange}
+                                error={this.hasErrors("password")}
+                                helperText={this.getErrors("password")}
+                            />
+                            <TextField
+                                id="confirmpassword"
+                                label="Confirm Password"
+                                className={classes.textField}
+                                margin="normal"
+                                type="password"
+                                variant="outlined"
+                                fullWidth
+                                value={this.state.confirmpassword}
+                                onChange={this.handleChange}
+                                error={this.hasErrors("confirmpassword")}
+                                helperText={this.getErrors("confirmpassword")}
+                            />
+                            <FormControlLabel
+                                control={<Checkbox value="remember" color="primary" />}
+                                label="I accept the Terms & Conditions"
+                            />
+                            <Button
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                                value={this.state.email}
+                                onClick={this.register}
+                            >
+                                Submit
+                            </Button>
+                        </form>
+                    </Paper>
+
+                </div>
+            )
+        }
     }
 }
 
