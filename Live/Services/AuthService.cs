@@ -39,7 +39,8 @@ namespace Live.Services
             var response = new Response();
 
             var user = await _dbContext.Users.SingleOrDefaultAsync(u =>
-                u.Email.Equals(request.Email, StringComparison.OrdinalIgnoreCase));
+                u.Email.Equals(request.Email, StringComparison.OrdinalIgnoreCase) || 
+                u.Username.Equals(request.Username, StringComparison.OrdinalIgnoreCase));
 
             if (user == null)
             {
@@ -74,8 +75,15 @@ namespace Live.Services
             }
             else
             {
+                if (user.Email.Equals(request.Email, StringComparison.OrdinalIgnoreCase))
+                {
+                    response.AddError("Email", "Email already registered");
+                }
+                else if (user.Username.Equals(request.Username, StringComparison.OrdinalIgnoreCase))
+                {
+                    response.AddError("Username", "Username already registered");
+                }
 
-                response.AddError("Email", "Email already registered");
 
             }
 

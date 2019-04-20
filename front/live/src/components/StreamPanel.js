@@ -143,6 +143,10 @@ class StreamPanel extends Component {
                 </Grid>
 
                 <Grid item xs={12} sm={10} md={8}>
+                    <Typography variant="body2" gutterBottom>
+                        Server URL: rtmp://stream.jrdn.tech:1935/app
+                    </Typography>
+                    
                     <TextField
                         disabled
                         id="outlined-disabled"
@@ -161,7 +165,14 @@ class StreamPanel extends Component {
                         Use this key in OBS
                     </Typography>
                 </Grid>
-
+                <Grid item xs={12} sm={10} md={8}>
+                    <Typography variant="body1" gutterBottom>
+                        Example
+                    </Typography>
+                    
+                    <img src="https://live.jrdn.tech/images/example.png" style={{maxWidth: '100%'}}/>
+                        
+                </Grid>
                 <Grid item>
                     {madeChanges && <Button color="primary" variant="contained">Save Changes</Button>}
                 </Grid>

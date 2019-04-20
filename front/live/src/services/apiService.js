@@ -3,7 +3,7 @@ import { formatErrors } from '../helpers/errorHelper';
 //import store from '../store/store';
 import { connect } from 'react-redux';
 
-export const api = "https://live.jrdn.tech";//"https://live.jrdn.tech";
+export const api = "https://stream.jrdn.tech";//"https://live.jrdn.tech";
 
 export const basicPost = async(controller, action, params) => {
     
