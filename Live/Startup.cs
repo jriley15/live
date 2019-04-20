@@ -44,7 +44,7 @@ namespace Live
 
      
             var dbContextOptions = new DbContextOptionsBuilder<DatabaseContext>()
-                .UseNpgsql("Server=jpostgresql.cvsix8yvmi3a.us-west-2.rds.amazonaws.com;Database=livestream;Port=5432;Uid=jordanadmin;Pwd=jordan3333").Options;
+                .UseNpgsql("Server=jpostgresql.cvsix8yvmi3a.us-west-2.rds.amazonaws.com;Database=livestream;Port=5432;Uid=jordanadmin;Pwd=jordan3333;Timeout=30;").Options;
 
             services.AddSingleton(dbContextOptions);
             services.AddDbContext<DatabaseContext>();
