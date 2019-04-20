@@ -159,7 +159,7 @@ class Register extends Component {
                         </Typography>
     
                         {this.hasErrors("*") && (
-                            <Typography variant="">
+                            <Typography variant="h5">
 
                                 {this.getErrors("*")}
 

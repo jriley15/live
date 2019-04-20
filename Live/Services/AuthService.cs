@@ -88,7 +88,7 @@ namespace Live.Services
             var response = new LoginResponse();
 
             var user = await _dbContext.Users.SingleOrDefaultAsync(u =>
-                u.Email.Equals(request.Email, StringComparison.OrdinalIgnoreCase) &&
+                u.Username.Equals(request.Username, StringComparison.OrdinalIgnoreCase) &&
                 u.Password.Equals(request.Password));
 
             if (user != null)

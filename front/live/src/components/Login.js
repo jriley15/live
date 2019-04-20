@@ -62,7 +62,7 @@ class Login extends Component {
 
 
     state = {
-        email: '123@live.com',
+        username: 'test',
         password: '1'
     }
 
@@ -72,7 +72,7 @@ class Login extends Component {
 
     login = () => {
 
-        this.props.login(this.state.email, this.state.password);
+        this.props.login(this.state.username, this.state.password);
 
     }
 
@@ -93,12 +93,12 @@ class Login extends Component {
                     </Typography>
                     <form autoComplete="off">
                         <TextField
-                            id="email"
-                            label="Email Address"
+                            id="username"
+                            label="Username"
                             margin="normal"
                             variant="outlined"
                             fullWidth
-                            value={this.state.email}
+                            value={this.state.username}
                             onChange={this.handleChange}
                             
                         />

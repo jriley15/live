@@ -2,13 +2,13 @@ import constants from "../constants/loginConstants";
 import { basicPost } from "../services/apiService";
 import { getAuth as loadAuth, storeAuth, deleteAuth } from "../helpers/authHelper";
 
-export const login = (email, pass) => async (dispatch, getState) => {
+export const login = (user, pass) => async (dispatch, getState) => {
 
     dispatch({
         type: constants.LOGIN_REQUEST
     });
 
-    let response = await basicPost("Auth", "Login", {Email: email, Password: pass});
+    let response = await basicPost("Auth", "Login", {Username: user, Password: pass});
 
     if (response.success) {
 
