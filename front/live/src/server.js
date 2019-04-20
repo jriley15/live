@@ -5,8 +5,8 @@ import express from 'express';
 import { renderToString } from 'react-dom/server';
 import theme from './theme';
 import jss from './styles';
-import { SheetsRegistry } from 'react-jss';
-import { JssProvider } from 'react-jss';
+import { SheetsRegistry } from 'jss';
+import JssProvider from 'react-jss/lib/JssProvider';
 import {
   MuiThemeProvider,
   createMuiTheme,
@@ -39,7 +39,7 @@ server
     // This is needed in order to inject the critical CSS.
     const sheetsRegistry = new SheetsRegistry();
 
-    const generateClassName = createGenerateClassName();
+    //const generateClassName = createGenerateClassName();
 
     // Compile an initial state
     let preloadedState = { };
@@ -80,7 +80,7 @@ server
 
     const markup = renderToString(
       <Provider store={store}>
-        <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
+        <JssProvider registry={sheetsRegistry} jss={jss}>
           <MuiThemeProvider sheetsManager={sheetsManager} theme={theme}>
             <StaticRouter context={context} location={req.url}>
               <App />
@@ -113,23 +113,23 @@ server
             ? `<link rel="stylesheet" href="${assets.client.css}">`
             : ''
         }
+
+        ${css ? `<style id='jss-server-side'>${css}</style>` : ''}
+
+        ${
+          process.env.NODE_ENV === 'production'
+            ? `<script src="${assets.client.js}" defer ></script>`
+            : `<script src="${assets.client.js}" defer crossorigin></script>`
+        }
         
     </head>
     <body>
         <div id="root">${markup}</div>
-
-        <style id="jss-server-side">${css}</style>
-
-
-        ${
-          process.env.NODE_ENV === 'production'
-            ? `<script src="${assets.client.js}" defer></script>`
-            : `<script src="${assets.client.js}" defer crossorigin></script>`
-        }
         
         <script>
           window.__PRELOADED_STATE__ = ${serialize(finalState)}
         </script>
+
     </body>
 </html>`
       );

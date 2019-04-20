@@ -9,6 +9,11 @@ import Browse from './components/Browse';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import Stream from './components/Stream';
+import { withStyles } from '@material-ui/core/styles';
+
+const styles = theme => ({
+  
+});
 
 const App = (props) => (
     <React.Fragment>
@@ -36,4 +41,4 @@ const App = (props) => (
 
 );
 
-export default App;
+export default withStyles(styles)(App);
