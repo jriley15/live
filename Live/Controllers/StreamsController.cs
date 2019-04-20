@@ -86,12 +86,12 @@ namespace Live.Controllers
 
         //increment live viewers
         [HttpGet]
-        public async Task<IActionResult> Onwatch(int id)
+        public async Task<IActionResult> OnWatch(int id)
         {
             return GenerateResponse(await _streamService.WatchStream(id));
 
 
-            return Ok();
+            //return Ok();
         }
 
         //decrement live viewers
