@@ -134,7 +134,7 @@ namespace Live
                 //policy.AllowAnyOrigin();
                 //policy.WithOrigins("http://localhost:3000", "http://192.168.1.17", "https://live.jrdn.tech", "http://98.171.80.97:3000");
                 //policy.SetIsOriginAllowed((host) => true);
-                policy.WithOrigins("http://192.168.1.14", "https://192.168.1.14", "http://localhost");
+                policy.WithOrigins("http://192.168.1.14", "https://192.168.1.14", "http://localhost", "https://192.168.1.10", "http://192.168.1.10");
                 policy.AllowCredentials();
             });
 
