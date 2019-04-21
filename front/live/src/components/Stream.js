@@ -55,9 +55,10 @@ class Stream extends Component {
 
         //basicGet("Streams", "Onwatch", {id: this.props.match.params.id});
 
+
         let me = this;
+        var video = document.getElementById('live');
         if (Hls.isSupported()) {
-            var video = document.getElementById('live');
             const hls = new Hls();
             // bind them together
             hls.attachMedia(video);
@@ -72,7 +73,12 @@ class Stream extends Component {
             });
 
             this.hls = hls;
-        }
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = 'https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8';
+            video.addEventListener('loadedmetadata',function() {
+              video.play();
+            });
+          }
 
         this.streamUpdateInterval = setInterval(() => {
             
