@@ -74,7 +74,7 @@ class Stream extends Component {
 
             this.hls = hls;
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = 'https://stream.jrdn.tech/live/"+me.props.match.params.id+"/index.m3u8';
+            video.src = "https://stream.jrdn.tech/live/"+me.props.match.params.id+"/index.m3u8";
             video.addEventListener('loadedmetadata',function() {
               video.play();
             });
