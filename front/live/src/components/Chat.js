@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import * as signalR from "@aspnet/signalr";
 import Typography from '@material-ui/core/Typography';
-import { Grid, TextField, Button, IconButton } from '@material-ui/core';
+import { Grid, TextField, Button, IconButton, Drawer } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { api } from '../services/apiService';
@@ -112,13 +112,13 @@ class Chat extends Component {
             this.connection.on("Messages", (messages) => {
 
                 this.setState({messages: messages});
-                this.scrollToBottom();
+                this.scrollToBottom('auto');
             });
 
             this.connection.on("Message", (message) => {
 
                 this.setState({messages: [...this.state.messages, message]});
-                this.scrollToBottom();
+                this.scrollToBottom('smooth');
             });
 
 
@@ -126,11 +126,11 @@ class Chat extends Component {
     }
 
 
-    scrollToBottom = () => {
+    scrollToBottom = (behavior) => {
 
         if (this.messagesEnd.current)
-            this.messagesEnd.current.scrollIntoView();//({ behavior: 'smooth' })
-        
+            this.messagesEnd.current.scrollIntoViewIfNeeded({behavior: behavior});//({ behavior: 'smooth' })
+
     }
 
     sendMessage = () => {
@@ -164,13 +164,15 @@ class Chat extends Component {
         return (
             <Grid container direction="column" className={classes.root} justify="space-between">
                 <Grid item className={classes.messageContainer}>
+                    
                     <Grid container direction="column" spacing={8}>
+                    
                         {messages.map(message => (
 
                             <Grid item key={message.chatMessageId}>
 
                                 <Typography variant="subtitle1" className={classes.message}>
-                                    <b>{message.user.email}</b>: {message.message}
+                                    <b>{message.user.username}</b>: {message.message}
                                 </Typography>
 
                             </Grid>
@@ -179,7 +181,10 @@ class Chat extends Component {
                         
                     </Grid> 
 
+                    
                     <div ref={this.messagesEnd} />
+                    
+
                 </Grid>
 
                 <Grid item className={classes.msgBox}>
@@ -199,7 +204,7 @@ class Chat extends Component {
                                 this.sendMessage();
                                 ev.preventDefault();
                             }
-                          }}
+                        }}
                     />
                     <Grid
                         container
@@ -217,6 +222,7 @@ class Chat extends Component {
                     </Grid>
                 </Grid>
             </Grid>
+        
         )
 
     }

@@ -128,7 +128,7 @@ class Stream extends Component {
 
                         <Grid container justify="center" >
                             <Grid item xs={12}>
-                                <video id="live" controls className={classes.player}>
+                                <video id="live" controls className={classes.player} poster={(stream.streamId && ("https://stream.jrdn.tech/thumbnails/"+stream.streamId+".png"))}>
                                 
                                 </video>
                             </Grid>
@@ -140,7 +140,7 @@ class Stream extends Component {
 
                                 <Typography variant="h6">
 
-                                    {user && stream.user.email}
+                                    {user && stream.user.username}
 
                                 </Typography>
 

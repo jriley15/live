@@ -30,7 +30,7 @@ const styles = theme => ({
         width: 200,
     },
 
-    main: {
+    mainDrop: {
         width: 'auto',
         display: 'block', // Fix IE 11 issue.
         marginLeft: theme.spacing.unit * 3,
@@ -40,6 +40,19 @@ const styles = theme => ({
             marginLeft: 'auto',
             marginRight: 'auto',
         },
+        
+    },
+    mainPage: {
+        width: 'auto',
+        display: 'block', // Fix IE 11 issue.
+        marginLeft: theme.spacing.unit * 3,
+        marginRight: theme.spacing.unit * 3,
+        [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+            width: 400,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+        
     },
     paper: {
         display: 'flex',
@@ -55,6 +68,10 @@ const styles = theme => ({
         marginTop: -12,
         marginLeft: -12,
       },
+
+    margin: {
+        marginTop: theme.spacing.unit * 10,
+    }
 
 });
 
@@ -86,8 +103,11 @@ class Login extends Component {
         const { classes } = this.props;
 
         return (
-            <div className={classes.main}>
-                <div className={classes.paper}>
+            <div className={(this.props.route && classes.mainPage) || (!this.props.route && classes.mainDrop)}>
+
+                {this.props.route && <div className={classes.margin} />}
+
+                <Paper className={classes.paper}>
                     <Typography variant="h5">
                         Login
                     </Typography>
@@ -131,7 +151,7 @@ class Login extends Component {
                         </Button>
                         
                     </form>
-                </div>
+                </Paper>
             </div>
         )
     }

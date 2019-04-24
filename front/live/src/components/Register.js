@@ -13,6 +13,9 @@ import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import { basicPost, basicGet } from "../services/apiService";
+import CheckIcon from '@material-ui/icons/Check';
+import green from '@material-ui/core/colors/green';
+import { Link } from 'react-router-dom';
 
 const styles = theme => ({
     container: {
@@ -45,6 +48,9 @@ const styles = theme => ({
         alignItems: 'center',
         padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
     },
+    check: {
+        backgroundColor: green[500]
+    }
 });
 
 
@@ -130,13 +136,15 @@ class Register extends Component {
             return (
                 <div className={classes.main}>
                     <Paper className={classes.paper}>
-                        <Avatar className={classes.avatar}>
-                            <LockOutlinedIcon />
+                        <Avatar className={classes.check}>
+                            <CheckIcon fontSize="large"/>
                         </Avatar>
                         <Typography component="h1" variant="h5">
-                            Sign up
+                            Success
                         </Typography>
-                        
+                        <Typography variant="body1" align="center">
+                            Your account has been created, click <Link to="/login">here</Link> to login
+                        </Typography>
 
                     </Paper>
                 </div>

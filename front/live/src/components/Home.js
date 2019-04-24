@@ -97,7 +97,7 @@ class Home extends React.Component {
 
                 </Typography>
                 <Typography variant="body1" gutterBottom align="center">
-                  {stream.user.email}
+                  {stream.user.username}
                 </Typography>
 
 

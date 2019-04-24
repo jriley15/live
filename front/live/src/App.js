@@ -10,6 +10,8 @@ import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import Stream from './components/Stream';
 import { withStyles } from '@material-ui/core/styles';
+import Following from './components/Following';
+import Login from './components/Login';
 
 const styles = theme => ({
   
@@ -26,7 +28,9 @@ const App = (props) => (
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/browse" component={Browse} />
+          <Route exact path="/following" component={Following} />
           <Route exact path="/register" component={Register} />
+          <Route exact path="/login" render={(props) => <Login {...props} route={true}/>}/>
 
           <Route exact path="/dashboard" component={Dashboard} />
           <Route exact path="/dashboard/stream" render={(props) => <Dashboard {...props} panel="stream"/>} />

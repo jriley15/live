@@ -13,13 +13,17 @@ import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import Login from './Login';
-import { MenuList, MenuItem, Menu } from '@material-ui/core';
+import { MenuList, MenuItem, Menu, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as LoginActions from '../actions/loginActions';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Grid from '@material-ui/core/Grid';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import HomeIcon from '@material-ui/icons/Home';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import ExitIcon from '@material-ui/icons/ExitToApp';
 
 const styles = theme => ({
     root: {
@@ -36,6 +40,7 @@ const styles = theme => ({
         fontSize: '20px',
         fontFamily: 'Varela Round, sans-serif',
         color: '#777',
+        textDecoration: 'none'
         //marginRight: theme.spacing.unit * 7
     },
     logoMobile: {
@@ -43,6 +48,7 @@ const styles = theme => ({
       fontSize: '20px',
       fontFamily: 'Varela Round, sans-serif',
       color: '#777',
+      textDecoration: 'none'
 
   },
     tv: {
@@ -132,14 +138,18 @@ const styles = theme => ({
       },
       deskTopbar: {
         paddingLeft: theme.spacing.unit * 2
-      }
+      },
+      list: {
+        width: 200,
+      },
 
   });
 
 class Navbar extends Component {
 
     state = {
-        loginOpen: false
+        loginOpen: false,
+        drawer: false
     };
 
     logout = () => {
@@ -161,6 +171,11 @@ class Navbar extends Component {
     };
     
     
+    toggleDrawer = (state) => () => {
+
+      this.setState({drawer: state});
+
+  }
   render() {
 
     const { classes } = this.props;
@@ -169,23 +184,63 @@ class Navbar extends Component {
     return (
 
         <div className={classes.root}>
+
+            <Drawer open={this.state.drawer} onClose={this.toggleDrawer(false)}>
+              <div
+                  tabIndex={0}
+                  role="button"
+                  onClick={this.toggleDrawer(false)}
+                  onKeyDown={this.toggleDrawer(false)}
+              >
+                <div className={classes.list}>
+                  <List>
+
+                      <ListItem button key={0}>
+                        <ListItemIcon> <HomeIcon/> </ListItemIcon>
+                        <ListItemText primary={"Home"} />
+                      </ListItem>
+
+                      {this.props.loginState.authenticated && <ListItem button key={1}>
+                        <ListItemIcon> <DashboardIcon/> </ListItemIcon>
+                        <ListItemText primary={"Dashboard"} />
+                      </ListItem>}
+
+                      {this.props.loginState.authenticated && <ListItem button key={2}>
+                          <ListItemIcon> <ExitIcon/> </ListItemIcon>
+                          <ListItemText primary={"Logout"} />
+                      </ListItem>}
+
+
+                      {!this.props.loginState.authenticated && <ListItem button key={3}>
+                        <ListItemIcon> <HomeIcon/> </ListItemIcon>
+                        <ListItemText primary={"Home"} />
+                      </ListItem>}
+
+                    </List>
+                  </div>
+              </div>
+            </Drawer>
+
             <AppBar position="fixed" color="default" className={classes.appBar}>
 
                 <Toolbar variant="dense" className={classes.sectionMobile}>
-                  <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
+                  <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer" onClick={this.toggleDrawer(true)}>
                     <MenuIcon />
                   </IconButton>
+
                   <div className={classes.grow} />
-                  <div className={classes.logoMobile}>
+
+                  <Link className={classes.logoMobile} to="/">
                       Yarb<b className={classes.tv}>TV</b>
-                  </div>
+                  </Link>
                 </Toolbar>
                 
                 <Toolbar variant="dense" className={classes.sectionDesktop}>
                     
-                    <div className={classes.logo}>
+                    <Link className={classes.logo}  to="/">
                         Yarb<b className={classes.tv}>TV</b>
-                    </div>
+                    </Link>
+
                     <Grid container direction="row" justify="flex-start" wrap="nowrap" className={classes.deskTopbar}>
                       <Grid item>
                         <Button color="inherit" component={Link} to="/" className={classes.link}>Home</Button>
@@ -194,7 +249,7 @@ class Navbar extends Component {
                         <Button color="inherit" component={Link} to="/browse" className={classes.link}>Browse</Button>
                       </Grid>
                       <Grid>
-                        <Button color="inherit" className={classes.link}>Following</Button>
+                        <Button color="inherit" component={Link} to="/following" className={classes.link}>Following</Button>
                       </Grid>
                       <Grid>
                         <div className={classes.search}>
@@ -242,6 +297,7 @@ class Navbar extends Component {
                               transformOrigin={{ vertical: "top", horizontal: "center" }}
                               open={loginOpen}
                               onClose={this.handleClose}
+                              MenuListProps={{style: {padding: 0}}}
                           >
                           
                             <Login/>

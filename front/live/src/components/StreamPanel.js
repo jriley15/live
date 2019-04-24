@@ -144,7 +144,7 @@ class StreamPanel extends Component {
 
                 <Grid item xs={12} sm={10} md={8}>
                     <Typography variant="body2" gutterBottom>
-                        Server URL: rtmp://stream.jrdn.tech:1935/app
+                        Server URL: rtmp://stream.jrdn.tech/app
                     </Typography>
                     
                     <TextField
@@ -170,7 +170,7 @@ class StreamPanel extends Component {
                         Example
                     </Typography>
                     
-                    <img src="https://live.jrdn.tech/images/example.png" style={{maxWidth: '100%'}}/>
+                    <img src="https://stream.jrdn.tech/images/example.png" style={{maxWidth: '100%'}}/>
                         
                 </Grid>
                 <Grid item>
